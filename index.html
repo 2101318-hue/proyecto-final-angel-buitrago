@@ -8,11 +8,12 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Pokédex SPA</title>
+    <title>Real Madrid - Jugadores SPA</title>
 
     <link rel="stylesheet" href="styles.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
 
     <link rel="preconnect"
           href="https://fonts.gstatic.com"
@@ -34,25 +35,31 @@
         <div class="logo">
 
             <img
-                src="/images.png"
-                alt="Pokédex">
+                src="https://api-deportivas.com/wp-content/uploads/2023/06/soccer-500x500-1.jpg"
+                alt="Real Madrid">
 
             <div>
 
-                <h1>Pokédex SPA</h1>
+                <h1>Real Madrid</h1>
 
-                <p>Proyecto con HTML, CSS y JavaScript</p>
+                <p>Jugadores SPA</p>
 
             </div>
 
         </div>
+
+
+        <!-- ========================= -->
+        <!-- BUSCADOR -->
+        <!-- ========================= -->
 
         <div class="search">
 
             <input
                 type="text"
                 id="searchInput"
-         detailContainer       placeholder="Buscar Pokémon...">
+                placeholder="Buscar jugador..."
+            >
 
             <button id="searchButton">
 
@@ -64,34 +71,48 @@
 
     </header>
 
+
     <!-- ========================= -->
     <!-- MAIN -->
     <!-- ========================= -->
 
     <main>
 
+
         <!-- ========================= -->
-        <!-- LISTA -->
+        <!-- LISTA DE JUGADORES -->
         <!-- ========================= -->
 
         <section class="pokemon-list">
 
             <div class="section-title">
 
-                <h2>Pokémon</h2>
+                <h2>Jugadores</h2>
 
                 <span id="pokemonCounter">
 
-                    0 Pokémon
+                    0 jugadores
 
                 </span>
 
             </div>
 
+
+            <!-- ========================= -->
+            <!-- CONTENEDOR -->
+            <!-- ========================= -->
+
             <div id="pokemonContainer">
-                <!-- JavaScript -->
+
+                <!-- Los jugadores serán creados
+                     mediante JavaScript -->
 
             </div>
+
+
+            <!-- ========================= -->
+            <!-- PAGINACIÓN -->
+            <!-- ========================= -->
 
             <div class="pagination">
 
@@ -111,6 +132,7 @@
 
         </section>
 
+
         <!-- ========================= -->
         <!-- DETALLE -->
         <!-- ========================= -->
@@ -120,18 +142,20 @@
             <div id="detailContainer">
 
                 <img
-                    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
-                    alt="Pokemon">
+                    src="https://api-deportivas.com/wp-content/uploads/2023/06/soccer-500x500-1.jpg"
+                    alt="Real Madrid"
+                >
 
                 <h2>
 
-                    Pikachu
+                    Real Madrid
 
                 </h2>
 
                 <p>
 
-                    Selecciona un Pokémon para ver su información.
+                    Selecciona un jugador para
+                    ver su información.
 
                 </p>
 
@@ -140,6 +164,7 @@
         </aside>
 
     </main>
+
 
     <!-- ========================= -->
     <!-- LOADING -->
@@ -151,11 +176,12 @@
 
         <p>
 
-            Cargando Pokémon...
+            Cargando jugadores...
 
         </p>
 
     </div>
+
 
     <!-- ========================= -->
     <!-- ERROR -->
@@ -164,9 +190,10 @@
     <div id="errorMessage"
          class="hidden">
 
-        Pokémon no encontrado.
+        Jugador no encontrado.
 
     </div>
+
 
     <!-- ========================= -->
     <!-- FOOTER -->
@@ -176,20 +203,26 @@
 
         <p>
 
-            Proyecto SPA utilizando PokéAPI
+            Proyecto SPA - Real Madrid
 
         </p>
 
         <p>
 
-            HTML • CSS • JavaScript • Fetch API
+            HTML • CSS • JavaScript • Fetch API • JSON
 
         </p>
 
     </footer>
+
+
+    <!-- ========================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================= -->
 
     <script src="script.js"></script>
 
 </body>
 
 </html>
+```

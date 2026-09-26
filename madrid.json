@@ -1,0 +1,144 @@
+{
+  "equipo": "Real Madrid",
+  "temporada": "2026/27",
+  "jugadores": {
+    "porteros": [
+      {
+        "dorsal": 1,
+        "nombre": "Thibaut Courtois",
+        "posicion": "Portero"
+      },
+      {
+        "dorsal": 13,
+        "nombre": "Andriy Lunin",
+        "posicion": "Portero"
+      }
+    ],
+    "defensas": [
+      {
+        "dorsal": 2,
+        "nombre": "Raúl Asencio",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 3,
+        "nombre": "Éder Militão",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 4,
+        "nombre": "Dean Huijsen",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 12,
+        "nombre": "Trent Alexander-Arnold",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 16,
+        "nombre": "Ibrahima Konaté",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 17,
+        "nombre": "Marc Cucurella",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 18,
+        "nombre": "Álvaro Carreras",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 22,
+        "nombre": "Antonio Rüdiger",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 23,
+        "nombre": "Ferland Mendy",
+        "posicion": "Defensa"
+      },
+      {
+        "dorsal": 24,
+        "nombre": "Denzel Dumfries",
+        "posicion": "Defensa"
+      }
+    ],
+    "centrocampistas": [
+      {
+        "dorsal": 5,
+        "nombre": "Jude Bellingham",
+        "posicion": "Centrocampista"
+      },
+      {
+        "dorsal": 6,
+        "nombre": "Eduardo Camavinga",
+        "posicion": "Centrocampista"
+      },
+      {
+        "dorsal": 8,
+        "nombre": "Federico Valverde",
+        "posicion": "Centrocampista"
+      },
+      {
+        "dorsal": 14,
+        "nombre": "Aurélien Tchouaméni",
+        "posicion": "Centrocampista"
+      },
+      {
+        "dorsal": 15,
+        "nombre": "Arda Güler",
+        "posicion": "Centrocampista"
+      },
+      {
+        "dorsal": 20,
+        "nombre": "Bernardo Silva",
+        "posicion": "Centrocampista"
+      },
+      {
+        "dorsal": 27,
+        "nombre": "Thiago Pitarch",
+        "posicion": "Centrocampista"
+      }
+    ],
+    "delanteros": [
+      {
+        "dorsal": 7,
+        "nombre": "Vinícius Júnior",
+        "posicion": "Delantero"
+      },
+      {
+        "dorsal": 9,
+        "nombre": "Endrick",
+        "posicion": "Delantero"
+      },
+      {
+        "dorsal": 10,
+        "nombre": "Kylian Mbappé",
+        "posicion": "Delantero"
+      },
+      {
+        "dorsal": 11,
+        "nombre": "Rodrygo",
+        "posicion": "Delantero"
+      },
+      {
+        "dorsal": 19,
+        "nombre": "Carlos Espí",
+        "posicion": "Delantero"
+      },
+      {
+        "dorsal": 21,
+        "nombre": "Brahim Díaz",
+        "posicion": "Delantero"
+      },
+      {
+        "dorsal": 25,
+        "nombre": "Yan Diomande",
+        "posicion": "Delantero"
+      }
+    ]
+  }
+}

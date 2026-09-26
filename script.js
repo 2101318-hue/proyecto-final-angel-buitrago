@@ -1,58 +1,83 @@
 // ===========================================
-// POKEDEX SPA
-// API: https://pokeapi.co
+// REAL MADRID SPA
+// JSON LOCAL
 // ===========================================
 
-// ==============================
-// URL BASE
-// ==============================
+// ===========================================
+// URL DEL JSON
+// ===========================================
 
-const URL = "https://pokeapi.co/api/v2/pokemon";
+const URL = "./madrid.json";
 
-// ==============================
+
+// ===========================================
 // VARIABLES
-// ==============================
+// ===========================================
 
 let offset = 0;
-const limite = 20;
 
-// ==============================
+const limite = 10;
+
+let todosLosJugadores = [];
+
+
+// ===========================================
 // ELEMENTOS DEL DOM
-// ==============================
+// ===========================================
 
-const pokemonContainer = document.getElementById("pokemonContainer");
-const detailContainer = document.getElementById("detailContainer");
+const jugadoresContainer =
+    document.getElementById("pokemonContainer");
 
-const previousBtn = document.getElementById("previousBtn");
-const nextBtn = document.getElementById("nextBtn");
+const detailContainer =
+    document.getElementById("detailContainer");
 
-const searchInput = document.getElementById("searchInput");
-const searchButton = document.getElementById("searchButton");
+const previousBtn =
+    document.getElementById("previousBtn");
 
-const loading = document.getElementById("loading");
-const errorMessage = document.getElementById("errorMessage");
+const nextBtn =
+    document.getElementById("nextBtn");
 
-const pokemonCounter = document.getElementById("pokemonCounter");
+const searchInput =
+    document.getElementById("searchInput");
 
-// ==============================
+const searchButton =
+    document.getElementById("searchButton");
+
+const loading =
+    document.getElementById("loading");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const counter =
+    document.getElementById("pokemonCounter");
+
+
+// ===========================================
 // LOADING
-// ==============================
+// ===========================================
 
 function mostrarLoading() {
+
     loading.classList.remove("hidden");
+
 }
+
 
 function ocultarLoading() {
+
     loading.classList.add("hidden");
+
 }
 
-// ==============================
+
+// ===========================================
 // ERROR
-// ==============================
+// ===========================================
 
-function mostrarError(texto = "Pokémon no encontrado.") {
+function mostrarError(mensaje) {
 
-    errorMessage.textContent = texto;
+    errorMessage.textContent = mensaje;
 
     errorMessage.classList.remove("hidden");
 
@@ -60,89 +85,230 @@ function mostrarError(texto = "Pokémon no encontrado.") {
 
         errorMessage.classList.add("hidden");
 
-    }, 2500);
+    }, 3000);
 
 }
 
-// ==============================
-// OBTENER LISTA
-// ==============================
 
-async function cargarPokemon() {
+// ===========================================
+// CARGAR JSON
+// ===========================================
+
+async function cargarJugadores() {
 
     mostrarLoading();
 
-    pokemonContainer.innerHTML = "";
-
     try {
 
-        const respuesta = await fetch(
-            `${URL}?offset=${offset}&limit=${limite}`
-        );
+        console.log("Cargando:", URL);
 
-        const datos = await respuesta.json();
 
-        pokemonCounter.textContent =
-            `${datos.results.length} Pokémon`;
+        const respuesta =
+            await fetch(URL);
 
-        for (const pokemon of datos.results) {
 
-            const respuestaPokemon = await fetch(pokemon.url);
+        if (!respuesta.ok) {
 
-            const info = await respuestaPokemon.json();
-
-            crearCard(info);
+            throw new Error(
+                `HTTP ${respuesta.status}`
+            );
 
         }
 
+
+        const datos =
+            await respuesta.json();
+
+
+        console.log(
+            "JSON recibido:",
+            datos
+        );
+
+
+        // =====================================
+        // COMPROBAR ESTRUCTURA
+        // =====================================
+
+        if (
+            !datos.jugadores
+        ) {
+
+            throw new Error(
+                "El JSON no contiene 'jugadores'"
+            );
+
+        }
+
+
+        // =====================================
+        // UNIR LAS CATEGORÍAS
+        // =====================================
+
+        todosLosJugadores = [
+
+            ...(datos.jugadores.porteros || []),
+
+            ...(datos.jugadores.defensas || []),
+
+            ...(datos.jugadores.centrocampistas || []),
+
+            ...(datos.jugadores.delanteros || [])
+
+        ];
+
+
+        console.log(
+            "Total jugadores:",
+            todosLosJugadores.length
+        );
+
+
+        // =====================================
+        // COMPROBAR JUGADORES
+        // =====================================
+
+        if (
+            todosLosJugadores.length === 0
+        ) {
+
+            throw new Error(
+                "No hay jugadores"
+            );
+
+        }
+
+
+        // =====================================
+        // MOSTRAR
+        // =====================================
+
+        offset = 0;
+
+        mostrarJugadores();
+
+
     } catch (error) {
 
-        mostrarError("Error cargando la Pokédex");
+        console.error(
+            "Error:",
+            error
+        );
+
+        mostrarError(
+            "No se pudo cargar madrid.json"
+        );
+
+    } finally {
+
+        ocultarLoading();
 
     }
 
-    ocultarLoading();
+}
+
+
+// ===========================================
+// MOSTRAR JUGADORES
+// ===========================================
+
+function mostrarJugadores() {
+
+    jugadoresContainer.innerHTML = "";
+
+
+    const inicio = offset;
+
+    const fin =
+        offset + limite;
+
+
+    const jugadores =
+        todosLosJugadores.slice(
+            inicio,
+            fin
+        );
+
+
+    counter.textContent =
+        `${todosLosJugadores.length} jugadores`;
+
+
+    jugadores.forEach(
+        jugador => {
+
+            crearCard(jugador);
+
+        }
+    );
+
+
+    actualizarPaginacion();
 
 }
 
-// ==============================
-// TARJETAS
-// ==============================
 
-function crearCard(pokemon) {
+// ===========================================
+// CREAR TARJETA
+// ===========================================
 
-    const card = document.createElement("article");
+function crearCard(jugador) {
+
+    const card =
+        document.createElement("article");
+
 
     card.classList.add("card");
 
+
+    const clase =
+        obtenerClasePosicion(
+            jugador.posicion
+        );
+
+
     card.innerHTML = `
 
-        <img src="${pokemon.sprites.other["official-artwork"].front_default}"
-             alt="${pokemon.name}">
+        <div class="player-number">
+
+            #${jugador.dorsal}
+
+        </div>
+
+
+        <div class="player-icon">
+
+            ⚽
+
+        </div>
+
 
         <div class="card-body">
 
             <p class="id">
 
-                #${pokemon.id}
+                Dorsal ${jugador.dorsal}
 
             </p>
 
+
             <h3>
 
-                ${capitalizar(pokemon.name)}
+                ${jugador.nombre}
 
             </h3>
 
-            <span class="tipo ${pokemon.types[0].type.name}">
 
-                ${capitalizar(pokemon.types[0].type.name)}
+            <span class="tipo ${clase}">
+
+                ${jugador.posicion}
 
             </span>
 
+
             <button>
 
-                Ver Información
+                Ver información
 
             </button>
 
@@ -150,134 +316,102 @@ function crearCard(pokemon) {
 
     `;
 
-    card.querySelector("button")
-        .addEventListener("click", () => {
 
-            mostrarDetalle(pokemon);
+    card
+        .querySelector("button")
+        .addEventListener(
+            "click",
+            () => {
 
-        });
+                mostrarDetalle(jugador);
 
-    pokemonContainer.appendChild(card);
+            }
+        );
+
+
+    jugadoresContainer.appendChild(card);
 
 }
 
-// ==============================
-// DETALLE
-// ==============================
 
-function mostrarDetalle(pokemon) {
+// ===========================================
+// DETALLE DEL JUGADOR
+// ===========================================
 
-    let estadisticas = "";
+function mostrarDetalle(jugador) {
 
-    pokemon.stats.forEach(stat => {
+    const clase =
+        obtenerClasePosicion(
+            jugador.posicion
+        );
 
-        estadisticas += `
-
-        <div class="stat">
-
-            <div class="stat-header">
-
-                <span>
-
-                    ${capitalizar(stat.stat.name)}
-
-                </span>
-
-                <span>
-
-                    ${stat.base_stat}
-
-                </span>
-
-            </div>
-
-            <div class="progress">
-
-                <span style="width:${Math.min(stat.base_stat,100)}%"></span>
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-    let tipos = "";
-
-    pokemon.types.forEach(tipo => {
-
-        tipos += `
-            <span class="tipo ${tipo.type.name}">
-                ${capitalizar(tipo.type.name)}
-            </span>
-        `;
-
-    });
-
-    let habilidades = "";
-
-    pokemon.abilities.forEach(habilidad => {
-
-        habilidades += `
-            <li>${capitalizar(habilidad.ability.name)}</li>
-        `;
-
-    });
 
     detailContainer.innerHTML = `
 
-        <img
-            src="${pokemon.sprites.other["official-artwork"].front_default}"
-            alt="${pokemon.name}">
+        <div class="detail-number">
 
-        <h2>
-
-            ${capitalizar(pokemon.name)}
-
-        </h2>
-
-        <h3>
-
-            #${pokemon.id}
-
-        </h3>
-
-        <div>
-
-            ${tipos}
+            #${jugador.dorsal}
 
         </div>
 
-        <p>
 
-            <strong>Altura:</strong>
-            ${pokemon.height / 10} m
+        <div class="detail-icon">
 
-        </p>
+            ⚽
 
-        <p>
+        </div>
 
-            <strong>Peso:</strong>
-            ${pokemon.weight / 10} kg
 
-        </p>
+        <h2>
 
-        <h3>
+            ${jugador.nombre}
 
-            Habilidades
+        </h2>
 
-        </h3>
 
-        <ul>
+        <span class="tipo ${clase}">
 
-            ${habilidades}
+            ${jugador.posicion}
 
-        </ul>
+        </span>
 
-        <div class="stats">
 
-            ${estadisticas}
+        <div class="player-info">
+
+            <p>
+
+                <strong>Equipo:</strong>
+
+                Real Madrid
+
+            </p>
+
+
+            <p>
+
+                <strong>Temporada:</strong>
+
+                2026/27
+
+            </p>
+
+
+            <p>
+
+                <strong>Dorsal:</strong>
+
+                ${jugador.dorsal}
+
+            </p>
+
+
+            <p>
+
+                <strong>Posición:</strong>
+
+                ${jugador.posicion}
+
+            </p>
 
         </div>
 
@@ -285,107 +419,253 @@ function mostrarDetalle(pokemon) {
 
 }
 
-// ==============================
-// BUSCAR
-// ==============================
 
-async function buscarPokemon() {
+// ===========================================
+// BUSCAR JUGADOR
+// ===========================================
 
-    const nombre = searchInput.value
-        .trim()
-        .toLowerCase();
+function buscarJugador() {
 
-    if (nombre === "") {
+    const texto =
+        searchInput.value
+            .trim()
+            .toLowerCase();
 
-        cargarPokemon();
+
+    // =====================================
+    // SI ESTÁ VACÍO
+    // =====================================
+
+    if (texto === "") {
+
+        offset = 0;
+
+        mostrarJugadores();
 
         return;
 
     }
 
-    mostrarLoading();
 
-    try {
+    // =====================================
+    // BUSCAR
+    // =====================================
 
-        const respuesta = await fetch(`${URL}/${nombre}`);
+    const resultados =
+        todosLosJugadores.filter(
+            jugador => {
 
-        if (!respuesta.ok) {
+                return (
 
-            throw new Error();
+                    jugador.nombre
+                        .toLowerCase()
+                        .includes(texto)
+
+                    ||
+
+                    jugador.posicion
+                        .toLowerCase()
+                        .includes(texto)
+
+                    ||
+
+                    String(
+                        jugador.dorsal
+                    ).includes(texto)
+
+                );
+
+            }
+        );
+
+
+    jugadoresContainer.innerHTML = "";
+
+
+    // =====================================
+    // NO ENCONTRADO
+    // =====================================
+
+    if (
+        resultados.length === 0
+    ) {
+
+        counter.textContent =
+            "0 jugadores";
+
+        mostrarError(
+            "Jugador no encontrado"
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
+    // MOSTRAR RESULTADOS
+    // =====================================
+
+    resultados.forEach(
+        jugador => {
+
+            crearCard(jugador);
+
+        }
+    );
+
+
+    counter.textContent =
+        `${resultados.length} resultado(s)`;
+
+
+    previousBtn.disabled = true;
+
+    nextBtn.disabled = true;
+
+}
+
+
+// ===========================================
+// PAGINACIÓN
+// ===========================================
+
+function actualizarPaginacion() {
+
+    previousBtn.disabled =
+        offset === 0;
+
+
+    nextBtn.disabled =
+        offset + limite >=
+        todosLosJugadores.length;
+
+}
+
+
+// ===========================================
+// BOTÓN SIGUIENTE
+// ===========================================
+
+nextBtn.addEventListener(
+    "click",
+    () => {
+
+        if (
+            offset + limite <
+            todosLosJugadores.length
+        ) {
+
+            offset += limite;
+
+            mostrarJugadores();
 
         }
 
-        const pokemon = await respuesta.json();
+    }
+);
 
-        pokemonContainer.innerHTML = "";
 
-        crearCard(pokemon);
+// ===========================================
+// BOTÓN ANTERIOR
+// ===========================================
 
-        mostrarDetalle(pokemon);
+previousBtn.addEventListener(
+    "click",
+    () => {
 
-        pokemonCounter.textContent = "1 Pokémon";
+        if (offset > 0) {
 
-    } catch {
+            offset -= limite;
 
-        mostrarError();
+            mostrarJugadores();
+
+        }
+
+    }
+);
+
+
+// ===========================================
+// BUSCADOR
+// ===========================================
+
+searchButton.addEventListener(
+    "click",
+    buscarJugador
+);
+
+
+searchInput.addEventListener(
+    "keypress",
+    event => {
+
+        if (event.key === "Enter") {
+
+            buscarJugador();
+
+        }
+
+    }
+);
+
+
+// ===========================================
+// CLASE DE POSICIÓN
+// ===========================================
+
+function obtenerClasePosicion(
+    posicion
+) {
+
+    const texto =
+        posicion
+            .toLowerCase();
+
+
+    if (
+        texto.includes("portero")
+    ) {
+
+        return "portero";
 
     }
 
-    ocultarLoading();
 
-}
+    if (
+        texto.includes("defensa")
+    ) {
 
-// ==============================
-// EVENTOS
-// ==============================
-
-searchButton.addEventListener("click", buscarPokemon);
-
-searchInput.addEventListener("keypress", e => {
-
-    if (e.key === "Enter") {
-
-        buscarPokemon();
+        return "defensa";
 
     }
 
-});
 
-// ==============================
-// PAGINACIÓN
-// ==============================
+    if (
+        texto.includes("centrocampista")
+    ) {
 
-nextBtn.addEventListener("click", () => {
+        return "centrocampista";
 
-    offset += limite;
+    }
 
-    cargarPokemon();
 
-});
+    if (
+        texto.includes("delantero")
+    ) {
 
-previousBtn.addEventListener("click", () => {
+        return "delantero";
 
-    if (offset === 0) return;
+    }
 
-    offset -= limite;
 
-    cargarPokemon();
-
-});
-
-// ==============================
-// UTILIDADES
-// ==============================
-
-function capitalizar(texto) {
-
-    return texto.charAt(0).toUpperCase() +
-        texto.slice(1);
+    return "";
 
 }
 
-// ==============================
+
+// ===========================================
 // INICIO
-// ==============================
+// ===========================================
 
-cargarPokemon();
+cargarJugadores();
